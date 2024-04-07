@@ -27,6 +27,14 @@ jobs:
         with:
           cli: "latest"
           bb: "latest"
+      - uses: actions/cache@v4
+        with:
+          path: |
+            ~/.m2/repository
+            ~/.gitlibs
+            ~/.deps.clj
+          key: cljdeps-${{ hashFiles('deps.edn', 'bb.edn') }}
+          restore-keys: cljdeps-
       - name: Run JVM tests
         run: |
           bb test:clj
