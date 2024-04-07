@@ -1,0 +1,35 @@
+name: Run tests
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    paths:
+      - ".github/workflows/test.yaml"
+      - "src/**"
+      - "test/**"
+      - "bb.edn"
+      - "deps.edn"
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Setup Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: "temurin"
+          java-version: "21"
+      - name: Setup Clojure
+        uses: DeLaGuardo/setup-clojure@12.5
+        with:
+          cli: "latest"
+          bb: "latest"
+      - name: Run JVM tests
+        run: |
+          bb test:clj
+      - name: Run bb tests
+        run: |
+          bb test:bb
