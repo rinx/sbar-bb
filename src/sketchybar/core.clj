@@ -2,42 +2,56 @@
   (:require
    [babashka.process :refer [shell]]
    [camel-snake-kebab.core :as csk]
-   [cheshire.core :as json])
+   [cheshire.core :as json]
+   [sketchybar.impl :as impl])
   (:refer-clojure :exclude [set update]))
 
-(defn map->kvs [m]
-  (->> m
-       (map (fn [[k v]]
-              (let [v (if (keyword? v)
-                        (name v)
-                        v)]
-                (str (name k) "=" v))))))
+(defn bar
+  "Configure Bar properties.
 
-(defn bar [m]
-  (flatten [["--bar"] (map->kvs m)]))
+  See: https://felixkratz.github.io/SketchyBar/config/bar"
+  [m]
+  (flatten [["--bar"] (impl/map->kvs m)]))
 
-(defn default [m]
-  (flatten [["--default"] (map->kvs m)]))
+(defn default
+  "Change default properties
+  
+  See: https://felixkratz.github.io/SketchyBar/config/items#changing-the-default-values-for-all-further-items"
+  [m]
+  (flatten [["--default"] (impl/map->kvs m)]))
 
-(defn set [item m]
-  (flatten [["--set" (name item)] (map->kvs m)]))
+(defn set
+  "Change item properties
+  
+  See: https://felixkratz.github.io/SketchyBar/config/items#changing-item-properties"
+  [item m]
+  (flatten [["--set" (name item)] (impl/map->kvs m)]))
 
-(defn add-item [item position]
+(defn add-item
+  "Add an item.
+
+  See: https://felixkratz.github.io/SketchyBar/config/items#adding-items-to-sketchybar"
+  [item position]
   ["--add" "item" (name item) (name position)])
 
-(defn add-graph [graph position width]
+(defn add-graph
+  [graph position width]
   ["--add" "graph" (name graph) (name position) (str width)])
 
-(defn add-space [space position]
+(defn add-space
+  [space position]
   ["--add" "space" (name space) (name position)])
 
-(defn add-bracket [bracket & members]
+(defn add-bracket
+  [bracket & members]
   (flatten [["--add" "bracket" (name bracket) (map name members)]]))
 
-(defn add-alias [app position]
+(defn add-alias
+  [app position]
   ["--add" "alias" app (name position)])
 
-(defn add-slider [slider position width]
+(defn add-slider
+  [slider position width]
   ["--add" "slider" (name slider) (name position) (str width)])
 
 (defn add-event
@@ -46,31 +60,33 @@
   ([event notification]
    ["--add" "event" (name event) (name notification)]))
 
-(defn push-datapoint [graph & data]
+(defn push-datapoint
+  [graph & data]
   (flatten [["--push" (name graph)] (map str data)]))
 
-(defn subscribe [item & events]
+(defn subscribe
+  [item & events]
   (flatten [["--subscribe" (name item)] (map name events)]))
 
-(defn exec [& args]
+(defn exec
+  [& args]
   (->> (flatten args)
        (filter some?)
        (apply shell "sketchybar")))
 
-(defn update []
+(defn update
+  []
   (exec "--update"))
 
-(defn query [& args]
+(defn query
+  [& args]
   (-> (apply shell {:out :string} "sketchybar" "--query" args)
       :out
       (json/parse-string csk/->kebab-case-keyword)))
 
 (comment
-  (map->kvs {:update_freq 5
-             :label.color "0x0000000"
-             :background.height 15
-             :script "bb test"})
   (bar {})
+  (default {})
   (set :battery {:script "bb battery.jar"
                  :update_freq 5
                  :background.color "0x000000"
