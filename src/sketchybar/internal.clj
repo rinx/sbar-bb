@@ -1,4 +1,4 @@
-(ns sketchybar.impl)
+(ns sketchybar.internal)
 
 (defn map->kvs [m]
   (->> m

@@ -3,7 +3,7 @@
    [babashka.process :refer [shell]]
    [camel-snake-kebab.core :as csk]
    [cheshire.core :as json]
-   [sketchybar.impl :as impl])
+   [sketchybar.internal :as internal])
   (:refer-clojure :exclude [set update]))
 
 (defn bar
@@ -11,21 +11,21 @@
 
   See: https://felixkratz.github.io/SketchyBar/config/bar"
   [m]
-  (flatten [["--bar"] (impl/map->kvs m)]))
+  (flatten [["--bar"] (internal/map->kvs m)]))
 
 (defn default
   "Change default properties
 
   See: https://felixkratz.github.io/SketchyBar/config/items#changing-the-default-values-for-all-further-items"
   [m]
-  (flatten [["--default"] (impl/map->kvs m)]))
+  (flatten [["--default"] (internal/map->kvs m)]))
 
 (defn set
   "Change item properties
 
   See: https://felixkratz.github.io/SketchyBar/config/items#changing-item-properties"
   [item m]
-  (flatten [["--set" (name item)] (impl/map->kvs m)]))
+  (flatten [["--set" (name item)] (internal/map->kvs m)]))
 
 (defn add-item
   "Add an item.
