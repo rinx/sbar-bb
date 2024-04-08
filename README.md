@@ -12,9 +12,7 @@ TBW
 
 ## Example
 
-TBW
-
-[rinx/dotfiles: macos/sketchybar](https://github.com/rinx/dotfiles/tree/60709726b7c2986de228e04f20e0c596ef4e1d8b/macos/sketchybar) will be re-written by using this module.
+- [rinx/dotfiles: macos/sketchybar](https://github.com/rinx/dotfiles/tree/ceb45e434684b8ce93349fc6ab602190c8cd7477/macos/sketchybar)
 
 ## Similar Projects
 
